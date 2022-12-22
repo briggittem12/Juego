@@ -7,7 +7,7 @@ export default function Home() {
     const navigation = useNavigation();
 
     return (
-        <View>
+        <View style={styles.container}>
             <Text>Hello Player</Text>
             <Button 
                 title='Go to List' 
@@ -16,4 +16,13 @@ export default function Home() {
         </View>
     )
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+})
 

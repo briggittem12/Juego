@@ -1,18 +1,22 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, FlatList } from 'react-native';
+import { addUserName } from '../globalState/playerSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUserNames } from '../globalState/playerSlice';
+
+
 
 export default function CreatePlayer(){
+
+    const userNames = useSelector(state => state.userName.userName);
+
     return (
-        <TouchableOpacity 
-        disabled={true}
-        style={styles.container}>
-            <View style={styles.modal}>
-                <View style={styles.textView}>
-                    <Text style={styles.text}>Agrega Jugadores</Text>
-                    <TextInput placeholder='Escribir nombre'></TextInput>
-                </View>
-            </View>
-        </TouchableOpacity>
+        <View>
+        <FlatList
+            data={userNames}
+            renderItem={({item}) => <Text>{item.key}</Text>}
+        />
+    </View>
     )
 }
 
@@ -22,13 +26,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    modal: {
-        height: 50,
-        width: '100px',
-        paddingTop: 10,
-        borderRadius: 10,
-        backgroundColor:'#ffef'
     },
     textView: {
         flex: 1,

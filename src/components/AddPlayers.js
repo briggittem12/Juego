@@ -1,25 +1,39 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, SafeAreaView, Pressable, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, SafeAreaView, Pressable, TextInput, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-
-
-
+import CreatePlayer  from './CreatePlayer';
+import { addUserName } from '../globalState/playerSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 export default function AddPlayers() {
 
     const [ modalActive, setModalActive ] = useState(false);
     const [ capInput, setCapInput ] = useState('')
-
-    const names = useSelector(state => state.userName);
+    const listUsers = useSelector(state => state.userName.userName)
     const dispatch = useDispatch();
 
+    const addMoreUser = async() => {
+        const newUser = {
+            id: uuid.v4(),
+            text: userName,
+        }
+        try {
+            await AsyncStorage.setItem('@UserName', JSON.stringify([... listUsers, newUser]));
+            dispatch(addUserName(newUser));
+            
+        } catch (e){
+            console.log(e)
+        }
+    }
 
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Jugadores</Text>
             <View style={styles.backConatiner}>
-                <Text>No hay jugadores aun </Text>
+                {/* { modalActive ? <Text>Agregar jugadors </Text> : <CreatePlayer/> } */}
+                
                 <Pressable 
                     onPress={() => setModalActive(true)} 
                     style={styles.button}
@@ -41,7 +55,7 @@ export default function AddPlayers() {
                             onChangeText={(text) => setCapInput(text)}
                             placeholder='Escribe un nombre'></TextInput>
                             <Pressable
-                            onPress={() => setModalActive(!modalActive)}
+                            onPress={addMoreUser}
                             >
                             <Text>Continuar</Text> 
                             </Pressable>
@@ -62,7 +76,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#3b7197',
         alignItems: 'center',
-        padding: 14
+        padding: 14,
+        overflow: 'hidden'
     },
     title: {
         color: '#fff',
